@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.rentaotao</groupId>
+        <artifactId>rtt-rpc</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>rtt-grpc</artifactId>
+    <version>${revision}</version>
+
+    <name>rtt-grpc</name>
+    <description>rtt-grpc</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty-shaded</artifactId>
+            <version>1.48.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-protobuf</artifactId>
+            <version>1.48.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-stub</artifactId>
+            <version>1.48.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.21.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java-util</artifactId>
+            <version>3.21.5</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <!-- 用开识别不同的操作系统 -->
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.7.0</version>
+            </extension>
+        </extensions>
+        <plugins>
+            <plugin>
+                <groupId>org.xolstice.maven.plugins</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>0.6.1</version>
+                <configuration>
+                    <!--
+                        groupId:artifactId:version:type:classifier
+                        如果指定了该参数，protoc 将尝试按照指定的参数对文件进行编译
+                    -->
+                    <protocArtifact>com.google.protobuf:protoc:3.21.5:exe:${os.detected.classifier}</protocArtifact>
+                    <!-- 自定义插件 -->
+                    <pluginId>grpc-java</pluginId>
+                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.48.1:exe:${os.detected.classifier}</pluginArtifact>
+                    <!-- proto文件路径，默认值：${project.basedir}/src/main/proto -->
+                    <protoSourceRoot>src/main/resources/protobuf</protoSourceRoot>
+                    <!-- 目标路径，默认值 ${project.basedir}/src/main/java -->
+                    <outputDirectory>src/main/java</outputDirectory>
+                    <!-- 设置是否在生成 java 文件之前清空 outputDirectory 的文件 -->
+                    <clearOutputDirectory>false</clearOutputDirectory>
+                    <!--临时目录-->
+                    <temporaryProtoFileDirectory>${project.build.directory}/protoc-temp</temporaryProtoFileDirectory>
+                    <!--protoc 可执行文件路径-->
+<!--                    <protocExecutable>${project.basedir}/protoc-3.15.6-osx-x86_64/bin/protoc</protocExecutable>-->
+                    <!-- protoc 的执行文件目录，默认值：${project.build.directory}/protoc-plugins. -->
+<!--                    <protocPluginDirectory>${project.basedir}/protoc-3.15.6-osx-x86_64</protocPluginDirectory>-->
+                    <excludes>
+                        <exclude>**/Im.proto</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <!-- 用来编译 proto 文件 -->
+                            <goal>compile</goal>
+                            <!--
+                                使用自定义插件
+                                pluginId：唯一表示 protoc 的插件，不能为内置的 protoc 插件，比如 grpc-java 插件
+                                pluginArtifact：识别插件版本
+                                pluginParameter：传递给插件的参数
+                            -->
+                            <goal>compile-custom</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

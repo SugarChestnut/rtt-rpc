@@ -1,0 +1,20 @@
+// 头部声明
+// 如果版本号为空，默认是 proto2
+syntax = "proto3";
+package cn.rentaotao.grpc.proto;
+
+// java 选项配置
+//option java_package = "cn.rtt.io.proto";
+// 指定生产的类名，不指定会根据 message 信息生成
+option java_outer_classname = "MsgProto";
+option java_multiple_files = true;
+
+service Greeter {
+  rpc sayHello (Msg) returns (Msg) {}
+}
+// 消息定义
+// 字段类型 字段名称 字段序号
+message Msg {
+  uint32 id = 1;
+  string content = 2;
+}

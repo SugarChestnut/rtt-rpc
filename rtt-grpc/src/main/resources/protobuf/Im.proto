@@ -1,0 +1,77 @@
+syntax = "proto3";
+package cn.rentaotao.grpc.proto;
+
+message Im {
+  // 消息类型
+  enum HeadType {
+    LOGIN_REQUEST = 0;        // 请求登录
+    LOGIN_RESPONSE = 1;       // 登录响应
+    LOGOUT_REQUEST = 2;       // 登出请求
+    LOGOUT_RESPONSE = 3;      // 登出响应
+    MESSAGE_KEEPALIVE = 4;    // 心跳请求
+    MESSAGE_REQUEST = 6;      // 聊天消息请求
+    MESSAGE_RESPONSE = 7;     // 聊天消息响应
+    MESSAGE_NOTIFICATION = 8; // 服务器通知
+  }
+
+  // 登录请求信息
+  message LoginRequest {
+    string uid = 1;           // 用户唯一 ID
+    string device_id = 2;     // 设备 ID
+    string token = 3;         // 用户 token
+    uint32 platform = 4;      // 客户平台
+    string app_version = 5;   // APP 版本号
+  }
+
+  message LoginResponse {
+    bool result = 1;          // 请求是否成功
+    uint32 code = 2;            // 错误码
+    string info = 3;          // 错误描述
+    uint32 expose = 4;        // 错误描述是否提示给用户
+  }
+
+  message MessageRequest {
+    uint64 msg_id = 1;        // 消息 ID
+    string form = 2;          // 消息发送者
+    string to = 3;            // 消息接收者
+    uint64 time = 4;          // 消息发送时间
+    uint32 msg_type = 5;      // 消息类型
+    string content = 6;       // 消息内容
+    string url = 7;           // 路径
+    string property = 9;
+    string from_nick = 10;
+    string json = 11;
+  }
+
+  message MessageResponse {           // 错误码
+    string info = 3;           // 错误描述
+    uint32 expose = 4;         // 错误描述是否展现给用户 1：是，0：否
+    bool last_block = 5;       // 是否为最后的应答
+    fixed32 block_index = 6;   // 应答的序号
+  }
+
+  message MessageNotification {
+    uint32 msg_type = 1;
+    uint64  sender = 2;
+    string json = 3;
+    string timestamp = 4;
+  }
+
+  message MessageKeepalive {
+    uint32 seq = 1;
+    string uid = 2;
+    string json = 3;
+  }
+
+  message Message {
+    HeadType head_type = 1;                         // 消息类型
+    uint64 sequence = 2;                            // 序列号
+    string session_id = 3;                          // 会话 ID
+    LoginRequest login_request = 4;                 // 登录请求
+    LoginResponse login_response = 5;               // 登录响应
+    MessageRequest message_request = 6;             // 聊天请求
+    MessageResponse message_response = 7;           // 聊天响应
+    MessageNotification message_notification = 8;   // 通知消息
+    MessageKeepalive message_keepalive = 9;         // 心跳
+  }
+}
