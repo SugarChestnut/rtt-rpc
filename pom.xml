@@ -27,6 +27,7 @@
     <modules>
         <module>rtt-grpc</module>
         <module>rtt-netty</module>
+        <module>rtt-jdk</module>
     </modules>
 
 </project>

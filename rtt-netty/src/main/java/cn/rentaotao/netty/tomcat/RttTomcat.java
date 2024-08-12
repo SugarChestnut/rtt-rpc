@@ -74,8 +74,8 @@ public class RttTomcat {
 
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-            if (msg instanceof HttpRequest httpRequest) {
-
+            if (msg instanceof HttpRequest) {
+                HttpRequest httpRequest = (HttpRequest) msg;
                 final RttRequest rttRequest = new RttRequest(httpRequest);
                 final RttResponse rttResponse = new RttResponse(ctx);
 
