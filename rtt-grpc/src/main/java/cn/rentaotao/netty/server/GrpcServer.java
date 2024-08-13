@@ -18,10 +18,10 @@ public class GrpcServer {
             60L,
             TimeUnit.SECONDS,
             new LinkedBlockingQueue<>(16384),
-            new ThreadFactoryBuilder().daemon(true).nameFormat("nacos-grpc-executor-%d").build());
+            new ThreadFactoryBuilder().setDaemon(true).setNameFormat("nacos-grpc-executor-%d").build());
 
     public void start() {
-        NettyServerBuilder.forPort(9090).executor()
+        NettyServerBuilder.forPort(9090).executor(sdkRpcExecutor);
     }
 
     public static void main(String[] args) {
