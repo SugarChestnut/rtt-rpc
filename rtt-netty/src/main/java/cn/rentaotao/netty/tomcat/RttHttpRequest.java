@@ -1,6 +1,5 @@
 package cn.rentaotao.netty.tomcat;
 
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 
@@ -11,11 +10,11 @@ import java.util.Map;
  * @author rtt
  * @date 2023/2/1 14:26
  */
-public class RttRequest {
+public class RttHttpRequest {
 
     private final HttpRequest request;
 
-    public RttRequest(HttpRequest request) {
+    public RttHttpRequest(HttpRequest request) {
         this.request = request;
     }
 

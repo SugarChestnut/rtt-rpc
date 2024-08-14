@@ -46,28 +46,34 @@ public class RttTomcat {
     }
 
     public void start() throws Exception {
-        init();
-
         final NioEventLoopGroup workerGroup = new NioEventLoopGroup();
         final NioEventLoopGroup bossGroup = new NioEventLoopGroup();
-        final ServerBootstrap server = new ServerBootstrap();
+        try {
+            init();
 
-        server.group(bossGroup, workerGroup)
-                .channel(NioServerSocketChannel.class)
-                .childHandler(new ChannelInitializer<SocketChannel>() {
-                    @Override
-                    protected void initChannel(SocketChannel socketChannel) throws Exception {
-                        socketChannel.pipeline().addLast(new HttpResponseEncoder());
-                        socketChannel.pipeline().addLast(new HttpRequestDecoder());
-                        socketChannel.pipeline().addLast(new RttTomcatHandler());
-                    }
-                })
-                .option(ChannelOption.SO_BACKLOG, 128)
-                .childOption(ChannelOption.SO_KEEPALIVE, true);
+            final ServerBootstrap server = new ServerBootstrap();
 
-        final ChannelFuture f = server.bind(port).sync();
-        System.out.println("服务器启动成功……");
-        f.channel().closeFuture().sync();
+            server.group(bossGroup, workerGroup)
+                    .channel(NioServerSocketChannel.class)
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        protected void initChannel(SocketChannel socketChannel) throws Exception {
+                            socketChannel.pipeline().addLast(new HttpResponseEncoder());
+                            socketChannel.pipeline().addLast(new HttpRequestDecoder());
+                            socketChannel.pipeline().addLast(new RttTomcatHandler());
+                        }
+                    })
+                    .option(ChannelOption.SO_BACKLOG, 128)
+                    .childOption(ChannelOption.SO_KEEPALIVE, true);
+
+            final ChannelFuture f = server.bind(port).sync();
+            System.out.println("服务器启动成功……");
+            f.channel().closeFuture().sync();
+        } finally {
+            bossGroup.shutdownGracefully();
+            workerGroup.shutdownGracefully();
+        }
+
     }
 
     class RttTomcatHandler extends ChannelInboundHandlerAdapter {
@@ -76,8 +82,8 @@ public class RttTomcat {
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
             if (msg instanceof HttpRequest) {
                 HttpRequest httpRequest = (HttpRequest) msg;
-                final RttRequest rttRequest = new RttRequest(httpRequest);
-                final RttResponse rttResponse = new RttResponse(ctx);
+                final RttHttpRequest rttRequest = new RttHttpRequest(httpRequest);
+                final RttHttpResponse rttResponse = new RttHttpResponse(ctx);
 
                 final String url = rttRequest.getUrl();
                 System.out.println("url: " + url);

@@ -1,6 +1,6 @@
 package cn.rentaotao.jdk.net.aio;
 
-import lombok.Data;
+import cn.rentaotao.jdk.net.ConnectionHolder;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -24,6 +24,9 @@ public class AioServer {
 
     private AsynchronousServerSocketChannel server;
 
+    /**
+     * 缓存
+     */
     private final ConcurrentHashMap<String, ConnectionHolder<AsynchronousSocketChannel>> cache = new ConcurrentHashMap<>();
 
     private final int port;
@@ -120,7 +123,7 @@ public class AioServer {
 
             @Override
             public void failed(Throwable exc, String attachment) {
-                System.out.println("处理连接失败");
+                System.out.println("处理连接失败："  + exc.getMessage());
                 ConnectionHolder<AsynchronousSocketChannel> holder = cache.get(attachment);
                 if (holder != null) {
                     try {
@@ -134,20 +137,10 @@ public class AioServer {
         });
     }
 
-    @Data
-    static class ConnectionHolder<T> {
-        T connection;
-        long connTime;
-        long lastActive;
-        String remoteAddr;
-        String id;
-    }
-
     public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("主线程：" + Thread.currentThread());
         AioServer aioServer = new AioServer(8587);
         aioServer.start();
-        System.out.println(1);
         if (aioServer.server.isOpen()) {
             new CountDownLatch(1).await();
         } else {

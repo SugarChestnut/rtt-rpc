@@ -7,7 +7,7 @@ package cn.rentaotao.netty.tomcat;
 public abstract class AbstractServlet implements Servlet{
 
     @Override
-    public void service(RttRequest request, RttResponse response) throws Exception {
+    public void service(RttHttpRequest request, RttHttpResponse response) throws Exception {
         final String method = request.getMethod();
         if ("GET".equals(method)) {
             doGet(request, response);
@@ -16,7 +16,7 @@ public abstract class AbstractServlet implements Servlet{
         }
     }
 
-    protected abstract void doGet(RttRequest request, RttResponse response) throws Exception;
+    protected abstract void doGet(RttHttpRequest request, RttHttpResponse response) throws Exception;
 
-    protected abstract void doPost(RttRequest request, RttResponse response) throws Exception;
+    protected abstract void doPost(RttHttpRequest request, RttHttpResponse response) throws Exception;
 }

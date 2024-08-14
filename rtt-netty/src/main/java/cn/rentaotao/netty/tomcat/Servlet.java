@@ -6,6 +6,6 @@ package cn.rentaotao.netty.tomcat;
  */
 public interface Servlet {
 
-    void service(RttRequest request, RttResponse response) throws Exception;
+    void service(RttHttpRequest request, RttHttpResponse response) throws Exception;
 
 }

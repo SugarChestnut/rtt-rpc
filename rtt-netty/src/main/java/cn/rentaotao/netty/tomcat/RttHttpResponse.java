@@ -12,11 +12,11 @@ import java.nio.charset.StandardCharsets;
  * @author rtt
  * @date 2023/2/1 14:26
  */
-public class RttResponse {
+public class RttHttpResponse {
 
     private final ChannelHandlerContext ctx;
 
-    public RttResponse(ChannelHandlerContext ctx) {
+    public RttHttpResponse(ChannelHandlerContext ctx) {
         this.ctx = ctx;
     }
 

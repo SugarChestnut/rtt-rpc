@@ -8,12 +8,12 @@ public class RttServlet extends AbstractServlet{
 
 
     @Override
-    public void doGet(RttRequest request, RttResponse response) throws Exception {
+    public void doGet(RttHttpRequest request, RttHttpResponse response) throws Exception {
         response.write("Rtt servlet");
     }
 
     @Override
-    public void doPost(RttRequest request, RttResponse response) throws Exception {
+    public void doPost(RttHttpRequest request, RttHttpResponse response) throws Exception {
         response.write("Rtt servlet");
     }
 }
