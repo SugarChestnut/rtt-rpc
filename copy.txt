@@ -1,0 +1,4 @@
+allocates a new direct byte buffer.
+The new buffer's position will be zero, its limit will be its capacity,
+its mark will be undefined, each of its elements will be initialized to zero,
+and its byte order will be BIG_ENDIAN. Whether it has a backing array is unspecified.
