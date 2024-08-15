@@ -1,7 +1,7 @@
 package cn.rentaotao.grpc.server;
 
-import cn.rentaotao.grpc.proto.GreeterGrpc;
-import cn.rentaotao.grpc.proto.Msg;
+import cn.rentaotao.common.proto.GreeterGrpc;
+import cn.rentaotao.common.proto.Msg;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;

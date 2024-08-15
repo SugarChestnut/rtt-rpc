@@ -1,5 +1,8 @@
 package cn.rentaotao.jdk.net.nio;
 
+import cn.rentaotao.common.utils.IOUtils;
+
+import java.io.Closeable;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -9,13 +12,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author rtt
  * @date 2024/8/13 16:02
  */
-public class NioClient {
+public class NioClient implements Closeable {
 
     private SocketChannel client;
 
@@ -25,12 +27,14 @@ public class NioClient {
 
     private final ByteBuffer buffer = ByteBuffer.allocate(1024);
 
+    private volatile boolean running = false;
+
     public void connect(String host, int port) throws Exception {
         client = SocketChannel.open();
         selector = Selector.open();
         // 建立连接是否阻塞，直到连接建立成功或者失败
         client.configureBlocking(false);
-        register = client.register(selector, SelectionKey.OP_CONNECT);
+        register = client.register(selector, SelectionKey.OP_READ);
         client.connect(new InetSocketAddress(host, port));
         /*
             socketChannel.isOpen();                 测试SocketChannel是否为非 close 状态
@@ -38,46 +42,47 @@ public class NioClient {
             socketChannel.isConnectionPending();    测试SocketChannel是否正在进行连接
             socketChannel.finishConnect();          校验正在进行套接字连接的SocketChannel是否已经完成连接
          */
-        while (!client.isConnected()) {}
-
-        while (true) {
-            System.out.println("数据处理线程：" + Thread.currentThread());
+        while (!client.finishConnect()) {
+        }
+        running = true;
+        while (running) {
             // 方法阻塞，直到至少有一个事件发生
-            selector.select();
+            if (selector.select() == 0) {
+                continue;
+            }
             Set<SelectionKey> selectionKeys = selector.selectedKeys();
             Iterator<SelectionKey> iterator = selectionKeys.iterator();
-            System.out.println(selectionKeys);
             while (iterator.hasNext()) {
                 SelectionKey selectionKey = iterator.next();
-                iterator.remove();
                 if (selectionKey.isReadable()) {
-                    try {
-                        read(selectionKey);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
+                    int len;
+                    while ((len = socketChannel.read(buffer)) > 0) {
+                        buffer.flip();
+                        System.out.println(new String(buffer.array(), 0, len, StandardCharsets.UTF_8));
+                        buffer.clear();
                     }
                 }
-                if (selectionKey.isWritable()) {
-                    System.out.println("write: " + selectionKey);
-                }
+                iterator.remove();
             }
         }
     }
 
-    private void read(SelectionKey key) throws Exception {
-        System.out.println("read: " + key);
-        SocketChannel socketChannel = (SocketChannel) key.channel();
-        int len;
-        while ((len = socketChannel.read(buffer)) > 0) {
-            System.out.println(new String(buffer.array(), 0, len, StandardCharsets.UTF_8));
-            buffer.clear();
-        }
+    @Override
+    public void close() {
+        IOUtils.closeQuality(selector, client);
+        running = false;
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println("主线程：" + Thread.currentThread());
         NioClient nioClient = new NioClient();
-        nioClient.connect("127.0.0.1", 8587);
+        new Thread(() -> {
+            try {
+                nioClient.connect("127.0.0.1", 8587);
+            } catch (Exception e) {
+                nioClient.close();
+            }
+        }).start();
         while (true) {
             System.out.println("输入：");
             Scanner scanner = new Scanner(System.in);
@@ -87,15 +92,11 @@ public class NioClient {
                 try {
                     nioClient.client.write(ByteBuffer.wrap(line.getBytes(StandardCharsets.UTF_8)));
                 } catch (Exception e) {
-                    try {
-                        nioClient.client.close();
-                    } catch (Exception e1) {
-                        // no-op
-                    }
+                    nioClient.client.close();
+                    e.printStackTrace();
                     break;
                 }
             }
         }
     }
-
 }

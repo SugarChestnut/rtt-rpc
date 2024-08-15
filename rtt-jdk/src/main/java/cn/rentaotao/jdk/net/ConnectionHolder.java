@@ -13,5 +13,7 @@ public class ConnectionHolder<T> {
     long connTime;
     long lastActive;
     String remoteAddr;
+    int port;
     String id;
+    String content;
 }
