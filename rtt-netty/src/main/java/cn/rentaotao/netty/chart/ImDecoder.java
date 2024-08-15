@@ -30,7 +30,7 @@ public class ImDecoder extends ByteToMessageDecoder {
             out.add(JSON.parseObject(array, ImMessage.class));
             in.release();
         } catch (Exception e) {
-            // 每个链接都有一个自己的 pipeline，当前连接的 pipeline 中移除
+            // 每个链接都有一个自己的 pipeline，说明当前不是 tcp 连接，移除当前解码器
             System.out.println("Remove ImDecoder");
             ctx.channel().pipeline().remove(this);
         }

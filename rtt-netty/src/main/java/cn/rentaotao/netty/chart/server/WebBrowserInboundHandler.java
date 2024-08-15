@@ -6,7 +6,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 /**
- * 处理浏览器发送过来的 TextWebSocketFrame 请求
+ * webSocket 客户端
  *
  * @author rtt
  * @date 2023/2/17 22:57

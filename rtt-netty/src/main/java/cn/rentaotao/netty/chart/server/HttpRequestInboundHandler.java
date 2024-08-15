@@ -9,7 +9,7 @@ import java.io.RandomAccessFile;
 import java.net.URL;
 
 /**
- * 处理 FullHttpRequest
+ * 处理Http请求
  *
  * @author rtt
  * @date 2023/2/17 16:11

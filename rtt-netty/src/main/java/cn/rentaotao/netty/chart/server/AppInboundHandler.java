@@ -5,7 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 /**
- * 处理 Java 控制台发过来的消息
+ * 处理客户端发过来的消息
  *
  * @author rtt
  * @date 2023/2/17 16:48
