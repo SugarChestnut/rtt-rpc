@@ -1,7 +1,7 @@
 package cn.rentaotao.netty.chart.client;
 
-import cn.rentaotao.netty.chart.protocol.ImMessage;
-import cn.rentaotao.netty.chart.protocol.Imp;
+import cn.rentaotao.netty.chart.ImMessage;
+import cn.rentaotao.netty.chart.Imp;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -13,13 +13,13 @@ import java.util.regex.Pattern;
  * @author rtt
  * @date 2023/2/20 14:05
  */
-public class ChatClientHandler extends SimpleChannelInboundHandler<ImMessage> {
+public class ImMessageInboundHandler extends SimpleChannelInboundHandler<ImMessage> {
 
     private ChannelHandlerContext ctx;
 
     private final String nickName;
 
-    public ChatClientHandler(String nickName) {
+    public ImMessageInboundHandler(String nickName) {
         this.nickName = nickName;
     }
 

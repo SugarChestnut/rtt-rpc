@@ -1,4 +1,4 @@
-package cn.rentaotao.netty.chart.protocol;
+package cn.rentaotao.netty.chart;
 
 import com.alibaba.fastjson.JSON;
 import io.netty.buffer.ByteBuf;
@@ -14,6 +14,8 @@ public class ImEncoder extends MessageToByteEncoder<ImMessage> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ImMessage msg, ByteBuf out) throws Exception {
+        System.out.println("ImEncoder");
+        // 返回JSON数据
         out.writeBytes(JSON.toJSONBytes(msg));
     }
 }

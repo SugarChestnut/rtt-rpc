@@ -1,9 +1,12 @@
-package cn.rentaotao.netty.chart.protocol;
+package cn.rentaotao.netty.chart;
+
+import lombok.Getter;
 
 /**
  * @author rtt
  * @date 2023/2/17 14:41
  */
+@Getter
 public enum Imp {
 
     /**
@@ -35,9 +38,5 @@ public enum Imp {
 
     public static boolean isImp(String content) {
         return content.matches("(system|login|logout|chat|flower)");
-    }
-
-    public String getType() {
-        return type;
     }
 }

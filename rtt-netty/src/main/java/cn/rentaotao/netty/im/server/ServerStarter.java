@@ -7,7 +7,7 @@ package cn.rentaotao.netty.im.server;
 public class ServerStarter {
 
     public static void main(String[] args) {
-        cn.rtt.io.netty.im.server.ImServer imServer = new cn.rtt.io.netty.im.server.ImServer();
+        ImServer imServer = new ImServer();
         imServer.start();
     }
 }

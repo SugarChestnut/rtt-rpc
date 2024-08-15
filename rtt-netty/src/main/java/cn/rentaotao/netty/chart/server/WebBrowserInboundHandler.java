@@ -6,12 +6,12 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 /**
- * 处理浏览器发送过来的 WebSocket 请求
+ * 处理浏览器发送过来的 TextWebSocketFrame 请求
  *
  * @author rtt
  * @date 2023/2/17 22:57
  */
-public class WebSocketServerHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
+public class WebBrowserInboundHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
     private final MsgProcessor processor = new MsgProcessor();
 
@@ -25,8 +25,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<TextWebS
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         Channel channel = ctx.channel();
         String address = processor.getAddress(channel);
-        System.out.println("WebSocket Client: " + address + " 异常");
-        cause.printStackTrace();
+        System.out.println("WebSocket Client: " + address + " 异常" + cause);
         ctx.close();
     }
 }

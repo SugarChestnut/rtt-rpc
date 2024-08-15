@@ -30,17 +30,14 @@ public class DatagramChannelServerUsage {
         channel.register(selector, SelectionKey.OP_READ);
 
         while (selector.select() > 0) {
-            System.out.println(selector.selectedKeys().toString());
             Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
 
             ByteBuffer buffer = ByteBuffer.allocate(1024);
 
             while (iterator.hasNext()) {
                 SelectionKey key = iterator.next();
-                /*
-                    有问题，该事件不一定在 channel 通道中发生
-                 */
                 if (key.isReadable()) {
+                    // udp 使用该方法获取数据
                     channel.receive(buffer);
                     buffer.flip();
                     System.out.println(new String(buffer.array(), 0, buffer.limit()));
@@ -50,6 +47,7 @@ public class DatagramChannelServerUsage {
 
             iterator.remove();
         }
+
         IOUtils.closeQuality(selector, channel);
     }
 }

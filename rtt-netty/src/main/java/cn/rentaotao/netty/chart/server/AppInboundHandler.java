@@ -1,6 +1,6 @@
 package cn.rentaotao.netty.chart.server;
 
-import cn.rentaotao.netty.chart.protocol.ImMessage;
+import cn.rentaotao.netty.chart.ImMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -10,7 +10,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * @author rtt
  * @date 2023/2/17 16:48
  */
-public class TerminalServerHandler extends SimpleChannelInboundHandler<ImMessage> {
+public class AppInboundHandler extends SimpleChannelInboundHandler<ImMessage> {
 
     private final MsgProcessor processor = new MsgProcessor();
 
@@ -23,7 +23,6 @@ public class TerminalServerHandler extends SimpleChannelInboundHandler<ImMessage
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         System.out.println("Socket Client: 客户端断开连接：" + cause.getMessage());
-        cause.printStackTrace();
         ctx.close();
     }
 }

@@ -9,12 +9,14 @@ import java.io.RandomAccessFile;
 import java.net.URL;
 
 /**
+ * 处理 FullHttpRequest
+ *
  * @author rtt
  * @date 2023/2/17 16:11
  */
-public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
+public class HttpRequestInboundHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
-    private final URL baseUrl = HttpServerHandler.class.getResource("");
+    private final URL baseUrl = HttpRequestInboundHandler.class.getResource("");
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest msg) throws Exception {

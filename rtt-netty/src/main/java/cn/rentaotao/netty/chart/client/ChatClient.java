@@ -1,7 +1,7 @@
 package cn.rentaotao.netty.chart.client;
 
-import cn.rentaotao.netty.chart.protocol.ImDecoder;
-import cn.rentaotao.netty.chart.protocol.ImEncoder;
+import cn.rentaotao.netty.chart.ImDecoder;
+import cn.rentaotao.netty.chart.ImEncoder;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -16,23 +16,23 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  */
 public class ChatClient {
 
-    private final ChatClientHandler clientHandler;
+    private final String nickName;
 
     private String host;
 
     private int port;
 
     public ChatClient(String nickName) {
-        this.clientHandler = new ChatClientHandler(nickName);
+        this.nickName = nickName;
     }
 
-    public void connect(String host, int port) {
+    public void connect(String host, int port) throws Exception{
         this.host = host;
         this.port = port;
         connect0();
     }
 
-    private void connect0() {
+    private void connect0() throws Exception{
         NioEventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
             Bootstrap b = new Bootstrap();
@@ -43,24 +43,19 @@ public class ChatClient {
                 @Override
                 protected void initChannel(SocketChannel ch) throws Exception {
                     ch.pipeline()
-                      .addLast(new ImDecoder())
-                      .addLast(new ImEncoder())
-                      .addLast(clientHandler);
+                            .addLast(new ImDecoder())
+                            .addLast(new ImEncoder())
+                            .addLast(new ImMessageInboundHandler(nickName));
                 }
             });
             ChannelFuture f = b.connect(host, port).sync();
             f.channel().closeFuture().sync();
-            ChannelFuture channelFuture = f.channel().closeFuture();
-            channelFuture.sync();
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             workerGroup.shutdownGracefully();
         }
     }
 
-    public static void main(String[] args) {
-        // new ChatClient("rtt").connect("127.0.0.1", 8080);
-        new ChatClient("yyl").connect("127.0.0.1", 8080);
+    public static void main(String[] args) throws Exception {
+        new ChatClient("rtt").connect("127.0.0.1", 8080);
     }
 }
