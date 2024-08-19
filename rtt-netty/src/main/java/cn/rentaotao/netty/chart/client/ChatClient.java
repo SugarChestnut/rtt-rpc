@@ -45,10 +45,13 @@ public class ChatClient {
                     ch.pipeline()
                             .addLast(new ImDecoder())
                             .addLast(new ImEncoder())
-                            .addLast(new ImMessageInboundHandler(nickName));
+                            .addLast(new ChatClientHandler(nickName));
                 }
             });
-            ChannelFuture f = b.connect(host, port).sync();
+            ChannelFuture f = b.connect(host, port);
+            System.out.println("等待连接……");
+            f.sync();
+            System.out.println("等待关闭");
             f.channel().closeFuture().sync();
         } finally {
             workerGroup.shutdownGracefully();

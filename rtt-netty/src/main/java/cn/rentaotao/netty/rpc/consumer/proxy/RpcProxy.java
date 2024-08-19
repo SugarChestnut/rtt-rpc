@@ -32,7 +32,13 @@ public class RpcProxy {
         return o;
     }
 
-    private record MethodProxy(Class<?> clazz) implements InvocationHandler {
+    private static class MethodProxy<T> implements InvocationHandler {
+
+        private final Class<T> clazz;
+
+        public MethodProxy(Class<T> clazz) {
+            this.clazz = clazz;
+        }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {

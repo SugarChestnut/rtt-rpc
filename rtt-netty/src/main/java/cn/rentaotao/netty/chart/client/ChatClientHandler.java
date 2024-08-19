@@ -13,13 +13,13 @@ import java.util.regex.Pattern;
  * @author rtt
  * @date 2023/2/20 14:05
  */
-public class ImMessageInboundHandler extends SimpleChannelInboundHandler<ImMessage> {
+public class ChatClientHandler extends SimpleChannelInboundHandler<ImMessage> {
 
     private ChannelHandlerContext ctx;
 
     private final String nickName;
 
-    public ImMessageInboundHandler(String nickName) {
+    public ChatClientHandler(String nickName) {
         this.nickName = nickName;
     }
 
@@ -53,7 +53,6 @@ public class ImMessageInboundHandler extends SimpleChannelInboundHandler<ImMessa
 
     private boolean sendMsg(ImMessage msg) {
         ctx.channel().writeAndFlush(msg);
-        System.out.println("继续输入开始对话……");
         return !Imp.LOGOUT.getType().equals(msg.getCmd());
     }
 

@@ -23,7 +23,7 @@ public class NioClient implements Closeable {
 
     private Selector selector;
 
-    private SelectionKey register;
+    private SelectionKey selectionKey;
 
     private final ByteBuffer buffer = ByteBuffer.allocate(1024);
 
@@ -34,8 +34,12 @@ public class NioClient implements Closeable {
         selector = Selector.open();
         // 建立连接是否阻塞，直到连接建立成功或者失败
         client.configureBlocking(false);
-        register = client.register(selector, SelectionKey.OP_READ);
-        client.connect(new InetSocketAddress(host, port));
+        selectionKey = client.register(selector, SelectionKey.OP_READ);
+        boolean connect = client.connect(new InetSocketAddress(host, port));
+        if (!connect) {
+            // 如果连接失败
+            selectionKey.interestOps(SelectionKey.OP_CONNECT);
+        }
         /*
             socketChannel.isOpen();                 测试SocketChannel是否为非 close 状态
             socketChannel.isConnected();            测试SocketChannel是否已经连接
