@@ -1,17 +1,17 @@
-package cn.rentaotao.netty.example.handler;
+package cn.rentaotao.netty.coding.handler;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
 /**
  * @author rtt
- * @create 2021/3/24 14:13
+ * @create 2021/3/24 15:57
  */
-public class IntergerProcessHandler extends ChannelInboundHandlerAdapter {
+public class StringProcessHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        Integer i = (Integer) msg;
-        System.out.println("处理数据: " + i);
+        String str = (String) msg;
+        System.out.println(str);
     }
 }

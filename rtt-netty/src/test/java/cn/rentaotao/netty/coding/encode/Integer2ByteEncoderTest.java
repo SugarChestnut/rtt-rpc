@@ -1,6 +1,5 @@
-package cn.rentaotao.netty.example.encode;
+package cn.rentaotao.netty.coding.encode;
 
-import cn.rentaotao.netty.example.encode.Integer2ByteEncoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.embedded.EmbeddedChannel;

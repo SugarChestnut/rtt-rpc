@@ -1,4 +1,4 @@
-package cn.rentaotao.netty.example.handler;
+package cn.rentaotao.netty.coding.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

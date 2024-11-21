@@ -1,4 +1,4 @@
-package cn.rentaotao.netty.example.decode;
+package cn.rentaotao.netty.coding.decode;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;

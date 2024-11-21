@@ -1,29 +1,23 @@
-package cn.rentaotao.netty.example.decode;
+package cn.rentaotao.netty.coding.decode;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ReplayingDecoder;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
  * @author rtt
- * @create 2021/3/24 14:52
+ * @create 2021/3/24 15:26
  */
-public class Byte2IntegerReplayDecoder extends ReplayingDecoder<Byte2IntegerReplayDecoder.Status> {
+public class StringReplayDecoder extends ReplayingDecoder<StringReplayDecoder.Status> {
 
-    /**
-     * 第一次读取结果
-     */
-    private int first;
+    private int length;
 
-    /**
-     * 第二次读取结果
-     */
-    private int second;
+    private byte[] content;
 
-    public Byte2IntegerReplayDecoder() {
-        // 设置初始状态
+    public StringReplayDecoder() {
         super(Status.PARSE_1);
     }
 
@@ -31,15 +25,14 @@ public class Byte2IntegerReplayDecoder extends ReplayingDecoder<Byte2IntegerRepl
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
         switch (state()) {
             case PARSE_1:
-                first = byteBuf.readInt();
-                // 转换状态
+                length = byteBuf.readInt();
+                System.out.println("接收到的长度: " + length);
+                content = new byte[length];
                 checkpoint(Status.PARSE_2);
                 break;
             case PARSE_2:
-                second = byteBuf.readInt();
-                Integer sum = first + second;
-                list.add(sum);
-                // 转换状态
+                byteBuf.readBytes(content, 0, length);
+                list.add(new String(content, StandardCharsets.UTF_8));
                 checkpoint(Status.PARSE_1);
                 break;
             default:

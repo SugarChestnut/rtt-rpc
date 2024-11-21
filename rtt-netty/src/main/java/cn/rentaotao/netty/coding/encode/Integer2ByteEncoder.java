@@ -1,4 +1,4 @@
-package cn.rentaotao.netty.example.encode;
+package cn.rentaotao.netty.coding.encode;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

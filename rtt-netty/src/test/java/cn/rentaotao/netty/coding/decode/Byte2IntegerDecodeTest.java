@@ -1,6 +1,6 @@
-package cn.rentaotao.netty.example.decode;
+package cn.rentaotao.netty.coding.decode;
 
-import cn.rentaotao.netty.example.handler.StringProcessHandler;
+import cn.rentaotao.netty.coding.handler.StringProcessHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelInitializer;
